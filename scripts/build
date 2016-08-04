@@ -1,0 +1,40 @@
+#!/bin/bash
+set -e
+ROOT_DIR="$(dirname $0)/.."
+APP_DIR="${ROOT_DIR}/app"
+BUILD_DIR="${ROOT_DIR}/build"
+SITE_DIR="${ROOT_DIR}/site"
+ASSETS_DIR="${SITE_DIR}/assets"
+BABEL="${ROOT_DIR}/node_modules/.bin/babel"
+
+# Ensure we are in a clean state
+rm -rf ${SITE_DIR}/* ${BUILD_DIR}/*
+mkdir -p ${ASSETS_DIR} ${BUILD_DIR}
+
+cleanup()
+{
+    # Clean up processes
+    rm -rf ${BUILD_DIR}
+    if [[ -n ${BABEL_PID} ]]; then
+        kill ${BABEL_PID}
+    fi
+}
+trap cleanup EXIT
+
+# Move over the index file (Going to be lazy and not watch these)
+cp -r ${APP_DIR}/static/* ${SITE_DIR}
+
+# Build the javascript
+if [[ $1 = "prod" ]]; then
+    # Bundle + Minify
+    ${BABEL} ${APP_DIR} -d ${BUILD_DIR}
+    browserify ${BUILD_DIR}/main.js -o ${BUILD_DIR}/bundle.js
+    uglifyjs ${BUILD_DIR}/bundle.js -o ${ASSETS_DIR}/bundle.js
+else
+    # Bundle + Watch
+    touch ${BUILD_DIR}/main.js
+    ${BABEL} ${APP_DIR} -d ${BUILD_DIR} -w &
+    BABEL_PID=$!
+    watchify ${BUILD_DIR}/main.js -t babelify -o ${ASSETS_DIR}/bundle.js -d &
+    wait
+fi

@@ -1,0 +1,32 @@
+{
+  "name": "mattkodes",
+  "version": "1.0.0",
+  "description": "Source code for www.mattkodes.com",
+  "main": "app/main.js",
+  "dependencies": {
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-core": "^6.11.4",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "browserify": "^13.1.0",
+    "uglify": "^0.1.5",
+    "watchify": "^3.7.0"
+  },
+  "scripts": {
+    "build": "./scripts/build",
+    "publish": "./scripts/publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewko/mattkodes.git"
+  },
+  "author": "Matthew Ko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthewko/mattkodes/issues"
+  },
+  "homepage": "https://github.com/matthewko/mattkodes#readme"
+}

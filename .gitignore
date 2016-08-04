@@ -1,2 +1,4 @@
 .DS_Store
 /scripts/publish
+/build
+/node_modules

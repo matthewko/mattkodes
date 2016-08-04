@@ -1,0 +1,53 @@
+var React = require('react'),
+    DOM = React.DOM, div = DOM.div, button = DOM.button, ul = DOM.ul, li = DOM.li
+
+// This is just a simple example of a component
+module.exports = React.createClass({
+
+  // We initialise its state by using the `props` that were passed in when it
+  // was first rendered. We also want the button to be disabled until the
+  // component has fully mounted on the DOM
+  getInitialState: function() {
+    return {items: this.props.items, disabled: true}
+  },
+
+  // Once the component has been mounted, we can enable the button
+  componentDidMount: function() {
+    this.setState({disabled: false})
+  },
+
+  // Then we just update the state whenever its clicked by adding a new item to
+  // the list - but you could imagine this being updated with the results of
+  // AJAX calls, etc
+  handleClick: function() {
+    this.setState({
+      items: this.state.items.concat('Item ' + this.state.items.length)
+    })
+  },
+
+  // For ease of illustration, we just use the React JS methods directly
+  // (no JSX compilation needed)
+  // Note that we allow the button to be disabled initially, and then enable it
+  // when everything has loaded
+  render: function() {
+    var center = {
+      textAlign: "center"
+    }
+
+    var divStyle = {
+      display: "block",
+      marginLeft: "auto",
+      marginRight: "auto"
+    };
+
+    return (
+      <div>
+        <h1 style={center}>This site is under construction!</h1>
+        <div>
+          <img src="images/typing_cat.gif" alt="Typing Cat" style={divStyle}></img>
+        </div>
+        <h1 style={center}>Please come back later.</h1>
+      </div>
+    );
+  },
+})
