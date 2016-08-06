@@ -1,11 +1,8 @@
 # mattkodes
 Source for www.mattkodes.com
 
-# Setup (Local)
-npm install
-npm run build
+# View Locally
+ $ npm install --only=dev
+ $ grunt dev
 
-# Production
-npm install
-npm run build prod
-npm run publish
+View the `site/index.html` file in the browser of your choice.

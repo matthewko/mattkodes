@@ -1,5 +1,5 @@
 var React = require('react'),
-    DOM = React.DOM, div = DOM.div, button = DOM.button, ul = DOM.ul, li = DOM.li
+    DOM = React.DOM, div = DOM.div, button = DOM.button, ul = DOM.ul, li = DOM.li;
 
 // This is just a simple example of a component
 module.exports = React.createClass({

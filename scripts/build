@@ -7,34 +7,106 @@ SITE_DIR="${ROOT_DIR}/site"
 ASSETS_DIR="${SITE_DIR}/assets"
 BABEL="${ROOT_DIR}/node_modules/.bin/babel"
 
-# Ensure we are in a clean state
-rm -rf ${SITE_DIR}/* ${BUILD_DIR}/*
-mkdir -p ${ASSETS_DIR} ${BUILD_DIR}
-
-cleanup()
+js()
 {
-    # Clean up processes
-    rm -rf ${BUILD_DIR}
-    if [[ -n ${BABEL_PID} ]]; then
-        kill ${BABEL_PID}
+    # Babel + Bundle
+    echo "BUILDING: JS"
+    if [[ -f ${ASSETS_DIR}/bundle.js ]]; then
+        rm -rf ${ASSETS_DIR}/bundle.js
     fi
+    mkdir -p ${ASSETS_DIR}
+    ${BABEL} ${APP_DIR}/javascript -d ${BUILD_DIR}
+    browserify ${BUILD_DIR}/main.js -o ${ASSETS_DIR}/bundle.js
+    rm -rf ${BUILD_DIR}
+    echo "${APP_DIR}/javascript -> ${ASSETS_DIR}/bundle.js"
 }
-trap cleanup EXIT
 
-# Move over the index file (Going to be lazy and not watch these)
-cp -r ${APP_DIR}/static/* ${SITE_DIR}
-
-# Build the javascript
-if [[ $1 = "prod" ]]; then
-    # Bundle + Minify
-    ${BABEL} ${APP_DIR} -d ${BUILD_DIR}
+minjs()
+{
+    # Bable + Bundle + Minify
+    echo "BUILDING: Minified JS"
+    if [[ -f ${ASSETS_DIR}/bundle.js ]]; then
+        rm -rf ${ASSETS_DIR}/bundle.js
+    fi
+    mkdir -p ${ASSETS_DIR}
+    ${BABEL} ${APP_DIR}/javascript -d ${BUILD_DIR}
     browserify ${BUILD_DIR}/main.js -o ${BUILD_DIR}/bundle.js
     uglifyjs ${BUILD_DIR}/bundle.js -o ${ASSETS_DIR}/bundle.js
+    rm -rf ${BUILD_DIR}
+    echo "${APP_DIR}/javascript -> ${ASSETS_DIR}/bundle.js"
+}
+
+html()
+{
+    # Copy over html files. (Remove old ones.)
+    echo "BUILDING: HTML"
+    TMP="/tmp/assets-${RANDOM}"
+    if [[ -d ${ASSETS_DIR} ]]; then
+        mv -f ${ASSETS_DIR} ${TMP}
+    fi
+    rm -rf ${SITE_DIR}
+    mkdir ${SITE_DIR}
+    if [[ -d ${TMP} ]]; then
+        mv ${TMP} ${ASSETS_DIR}
+    fi
+    cp -rf ${APP_DIR}/html/* ${SITE_DIR}
+}
+
+copy_dir()
+{
+    # Copy over directory files. (Remove old ones.)
+    echo "BUILDING: $1"
+    if [[ -d ${ASSETS_DIR}/$1 ]]; then
+        rm -rf ${ASSETS_DIR}/$1
+    fi
+    mkdir -p ${ASSETS_DIR}
+    cp -R ${APP_DIR}/$1 ${ASSETS_DIR}/$1
+    echo "${ASSETS_DIR}/$1 -> ${ASSETS_DIR}/$1"
+}
+
+prod()
+{
+    html
+    minjs
+    copy_dir stylesheets
+    copy_dir images
+    copy_dir data
+}
+
+dev()
+{
+    html
+    js
+    copy_dir stylesheets
+    copy_dir images
+    copy_dir data
+}
+
+mkdir -p ${SITE_DIR}
+if [[ -d ${BUILD_DIR} ]]; then
+    rm -rf ${BUILD_DIR}
+fi
+
+# Long if statement...
+if [[ $1 = "js" ]]; then
+    js
+elif [[ $1 = "minjs" ]]; then
+    minjs
+elif [[ $1 = "html" ]]; then
+    html
+elif [[ ($1 = "css") || ($1 = "stylesheets") ]]; then
+    copy_dir stylesheets
+elif [[ $1 = "images" ]]; then
+    copy_dir images
+elif [[ $1 = "data" ]]; then
+    copy_dir data
+elif [[ $1 = "prod" ]]; then
+    prod
+elif [[ $1 = "dev" ]]; then
+    dev
+elif [[ -z "$1" ]]; then
+    dev
 else
-    # Bundle + Watch
-    touch ${BUILD_DIR}/main.js
-    ${BABEL} ${APP_DIR} -d ${BUILD_DIR} -w &
-    BABEL_PID=$!
-    watchify ${BUILD_DIR}/main.js -t babelify -o ${ASSETS_DIR}/bundle.js -d &
-    wait
+    echo "Unknown build action: $1"
+    exit 1
 fi

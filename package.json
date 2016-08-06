@@ -2,7 +2,7 @@
   "name": "mattkodes",
   "version": "1.0.0",
   "description": "Source code for www.mattkodes.com",
-  "main": "app/main.js",
+  "main": "app/javascript/main.js",
   "dependencies": {
     "react": "^15.3.0",
     "react-dom": "^15.3.0"
@@ -12,8 +12,12 @@
     "babel-core": "^6.11.4",
     "babel-plugin-transform-react-jsx": "^6.8.0",
     "browserify": "^13.1.0",
-    "uglify": "^0.1.5",
-    "watchify": "^3.7.0"
+    "grunt": "~0.4.2",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-run": "^0.6.0",
+    "react": "^15.3.0",
+    "react-dom": "^15.3.0",
+    "uglify": "^0.1.5"
   },
   "scripts": {
     "build": "./scripts/build",
