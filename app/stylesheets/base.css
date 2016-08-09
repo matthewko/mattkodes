@@ -1,0 +1,11 @@
+.full-width {
+  width: 100%;
+}
+
+.flexible {
+  flex: 1 1 auto;
+}
+
+.inflexible {
+  flex: none;
+}

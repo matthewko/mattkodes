@@ -27,6 +27,10 @@ module.exports = function (grunt) {
         cmd: './scripts/build',
         args: ['data']
       },
+      buildFonts: {
+        cmd: './scripts/build',
+        args: ['fonts']
+      },
       buildDev: {
         cmd: './scripts/build',
         args: ['dev']
@@ -72,6 +76,14 @@ module.exports = function (grunt) {
       data: {
         files: ['app/html/**/*'],
         tasks: ['run:buildData'],
+        options: {
+          interrupt: true,
+          debounceDelay: 1000
+        }
+      },
+      fonts: {
+        files: ['app/fonts/**/*'],
+        tasks: ['run:buildFonts'],
         options: {
           interrupt: true,
           debounceDelay: 1000

@@ -71,6 +71,7 @@ prod()
     copy_dir stylesheets
     copy_dir images
     copy_dir data
+    copy_dir fonts
 }
 
 dev()
@@ -80,6 +81,7 @@ dev()
     copy_dir stylesheets
     copy_dir images
     copy_dir data
+    copy_dir fonts
 }
 
 mkdir -p ${SITE_DIR}
@@ -100,6 +102,8 @@ elif [[ $1 = "images" ]]; then
     copy_dir images
 elif [[ $1 = "data" ]]; then
     copy_dir data
+elif [[ $1 = "fonts" ]]; then
+    copy_dir fonts
 elif [[ $1 = "prod" ]]; then
     prod
 elif [[ $1 = "dev" ]]; then

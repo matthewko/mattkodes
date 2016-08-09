@@ -3,7 +3,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 // Create the react app
-var WebApp = React.createFactory(require('./WebApp'));
+var WebApp = React.createFactory(require('./web-app'));
 
 // Render the web app
 ReactDOM.render(WebApp(), document.getElementById('web-app'));

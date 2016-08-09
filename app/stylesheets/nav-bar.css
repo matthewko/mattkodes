@@ -1,0 +1,19 @@
+.top-fixed {
+  z-index: 9999;
+  position: fixed;
+  padding: 0px;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  height: 60px;
+  width: calc(100% - 20px);
+}
+
+.navbar-element {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}

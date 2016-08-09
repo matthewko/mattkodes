@@ -1,5 +1,5 @@
 module.exports = (function () {
-  var Constants = {}
+  var Constants = {};
 
   Constants.ASSETS_PATH = "assets/";
   Constants.IMAGE_PATH = Constants.ASSETS_PATH+"images/";
