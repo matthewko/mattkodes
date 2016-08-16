@@ -17,3 +17,11 @@
   align-items: center;
   height: 100%;
 }
+
+.navbar-inverse a {
+  color: white;
+}
+
+.navbar-inverse a:hover {
+  color: #1ABC9C;
+}

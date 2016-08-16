@@ -8,7 +8,8 @@ module.exports = React.createClass({
   render: function() {
     // Extra navbar element needed to keep alignment on top-fixed
     return (
-      <div className={'navbar-element navbar-brand'+(this.props.flexible ? ' flexible' : ' inflexible')}>
+      <div className={'navbar-element navbar-brand'+(this.props.flexible ?
+                      ' flexible-x1' : ' inflexible')}>
           {this.props.children}
       </div>
     );

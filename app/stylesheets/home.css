@@ -1,0 +1,9 @@
+.hug-right {
+  float: right;
+}
+
+.center-content {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}

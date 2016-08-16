@@ -2,10 +2,27 @@
   width: 100%;
 }
 
-.flexible {
+.flex-container {
+  display: flex;
+}
+
+.flexible-x1 {
   flex: 1 1 auto;
+}
+
+.flexible-x2 {
+  flex: 2 2 auto;
 }
 
 .inflexible {
   flex: none;
+}
+
+.horizontal-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.centered-text {
+  text-align: center;
 }
