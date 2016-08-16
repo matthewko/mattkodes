@@ -42,7 +42,7 @@ module.exports = function (grunt) {
     },
     watch: {
       js: {
-        files: ['app/javascript/**/*.js'],
+        files: ['app/javascript/**/*.js','app/javascript/**/*.jsx'],
         tasks: ['run:buildJS'],
         options: {
           interrupt: true,
