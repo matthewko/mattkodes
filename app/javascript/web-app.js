@@ -37,7 +37,9 @@ module.exports = React.createClass({
       <div>
         <NavBar topFixed>
           <NavBarElement>
-            <img className="nav-logo" src={Constants.IMAGE_PATH+"matt_kodes.png"}></img>
+            <a href="/">
+              <img className="nav-logo" src={Constants.IMAGE_PATH+"matt_kodes.png"}></img>
+            </a>
           </NavBarElement>
           <NavBarElement flexible>
           </NavBarElement>
