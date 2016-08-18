@@ -9,6 +9,8 @@ var Projects = require('./routes/projects');
 var Skills = require('./routes/skills');
 var Work = require('./routes/work');
 
+var Error404 = require('./error_pages/404')
+
 module.exports = React.createClass({
   getDefaultProps: function() {
     return {
@@ -28,6 +30,8 @@ module.exports = React.createClass({
         return (<Skills></Skills>)
       case "contact":
         return (<Contact></Contact>);
+      case "404":
+        return (<Error404></Error404>)
       default:
         return (<h1>Uhhh... Something broke...Sorry!</h1>);
     }

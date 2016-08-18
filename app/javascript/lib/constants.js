@@ -5,6 +5,7 @@ module.exports = (function () {
   Constants.IMAGE_PATH = Constants.ASSETS_PATH+"images/";
   Constants.DATA_PATH = Constants.ASSETS_PATH+"data/";
   Constants.STYLESHEETS = Constants.ASSETS_PATH+"stylesheets";
+  Constants.ERROR_PAGES = "/error_pages/";
 
   return Constants;
 })();
