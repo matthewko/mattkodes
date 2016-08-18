@@ -1,0 +1,93 @@
+#!/usr/bin/env python
+import ftplib
+
+def delete_dir(ftp, directory):
+    """
+    Deletes the target directory and all its contents.
+    """
+    cur_dir = ftp.pwd()
+    try:
+        ftp.cwd(directory)
+        for file in ftp.nlst():
+            if file in [".", ".."]:
+                continue
+            print "Deleting {}".format(file)
+            try:
+                # Delete the object if it is a file
+                ftp.delete(file)
+            except ftplib.error_perm:
+                # This was actually a directory
+                delete_dir(ftp, file)
+        ftp.cwd('..')
+        ftp.rmd(directory)
+    finally:
+        ftp.cwd(cur_dir)
+
+def upload_dir(ftp, local_dir, remote_dir):
+    """
+    Upload the target directory and all its content.
+    """
+    try:
+        ftp.mkd(remote_dir)
+    except ftplib.error_perm:
+        pass
+
+    cur_dir = ftp.pwd()
+    try:
+        for root, dirs, files in os.walk(local_dir, topdown=True):
+            rel_path = root[len(local_dir):].lstrip(os.sep)
+            remote_path = os.path.join(remote_dir, rel_path)
+            ftp.cwd(remote_path)
+
+            # Make the necessary directories
+            for d in dirs:
+                ftp.mkd(d)
+
+            # Upload the necessary files
+            for f in files:
+                print "Uploading {}".format(f)
+                ftp.storbinary('STOR ' + f, open(os.path.join(root, f), 'rb'))
+    finally:
+        ftp.cwd(cur_dir)
+
+if __name__ == "__main__":
+    import argparse
+    import getpass
+    import json
+    import os
+    import sys
+
+    # Read in defaults if it exists
+    SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
+    creds = {}
+    creds_file_path = os.path.join(SCRIPTS_DIR, 'default_creds.json')
+    if os.path.isfile(creds_file_path):
+        with open(creds_file_path) as data_file:
+            creds = json.load(data_file)
+
+    parser = argparse.ArgumentParser(description='Small script to publish a folder to a FTP server.')
+    parser.add_argument('--host', action="store", type=str, dest="HOST", default=creds.get('host'))
+    parser.add_argument('--user', action="store", type=str, dest="USER", default=creds.get('user'))
+    parser.add_argument('--remote-dir', action="store", type=str, dest="REMOTE_DIR", default=creds.get('remote_dir'))
+    parser.add_argument('--local-dir', action="store", type=str, dest="LOCAL_DIR")
+    args = parser.parse_args()
+
+    # Delete the target directory on the remote and upload the contents from 'site',
+    # unless 'local-dir' is specified
+    if args.LOCAL_DIR is None:
+        args.LOCAL_DIR = os.path.join(os.path.dirname(SCRIPTS_DIR), "site")
+    PASSWORD = getpass.getpass('Password: ')
+    try:
+        ftp = ftplib.FTP(args.HOST, args.USER, PASSWORD)
+        try:
+            # Since 'recursive_delete' requires the directory to exist, just make sure it exists here.
+            ftp.mkd(args.REMOTE_DIR)
+        except ftplib.error_perm:
+            pass
+        # Remove the directory an upload our data
+        ftp.cwd('/')
+        delete_dir(ftp, args.REMOTE_DIR)
+        upload_dir(ftp, args.LOCAL_DIR, args.REMOTE_DIR)
+    finally:
+        if ftp:
+            ftp.quit()

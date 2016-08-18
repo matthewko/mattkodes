@@ -1,5 +1,5 @@
 .DS_Store
-/scripts/publish
+/scripts/default_creds.json
 /build
 /node_modules
 /site
