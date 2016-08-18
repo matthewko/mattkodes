@@ -49,7 +49,7 @@ html()
     if [[ -d ${TMP} ]]; then
         mv ${TMP} ${ASSETS_DIR}
     fi
-    cp -rf ${APP_DIR}/html/* ${SITE_DIR}
+    cp -rf ${APP_DIR}/html/. ${SITE_DIR}
 }
 
 copy_dir()
